@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>QPlugin Library</title>
+</head>
+
+<body oncontextmenu="return false;">
+  <div id="app"></div>
+  <script>
+    if (process.env.PRODUCTION === 'false') {
+      require('babel-register');
+    }
+    require('./js/renderer/app.js');
+  </script>
+</body>
+
+</html>

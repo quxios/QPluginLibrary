@@ -1,0 +1,309 @@
+// out: false
+// Don't build this file, build styleLess.less and styleDark.less
+
+@import "Roboto/roboto.css";
+@import "font-awesome/css/font-awesome.min.css";
+@import (less, reference) "font-awesome/css/font-awesome.min.css";
+
+html {
+	.fill();
+}
+body {
+  .fill();
+  .primary();
+	font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+	padding: 0;
+	margin: 0;
+  -webkit-user-select: none;
+  user-select: none;
+	cursor: default;
+	overflow: hidden;
+}
+::-webkit-scrollbar {
+  width: 12px;
+	height: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background: @primary-highlight;
+}
+a {
+  cursor: pointer;
+	color: @primary-highlight;
+}
+#app {
+  .fill();
+}
+.fill {
+  height: 100%;
+  width: 100%;
+}
+.veil {
+  .fill();
+  visibility: visible;
+	position: absolute;
+	top: 0;
+	left: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  transition: all 100ms linear;
+  cursor: pointer;
+  &:empty {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+.contextMenu {
+	position: absolute;
+	background-color: @secondary-bg;
+	border: 1px solid @secondary-border;
+	padding: 5px 0;
+	z-index: 11;
+	.item {
+		padding: 2px 5px;
+		cursor: pointer;
+		&:hover {
+			background-color: @secondary-border;
+		}
+	}
+}
+button {
+	cursor: pointer;
+	height: 24px;
+	min-width: 60px;
+	margin: 0 5px;
+	outline: none;
+  background-color: inherit;
+  border: 2px solid @primary-border;
+	border-radius: 3px;
+	transition: all 150ms linear;
+	&.disabled {
+		cursor: not-allowed;
+	}
+}
+.tab {
+  height: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: all 100ms linear;
+  border-bottom: 4px solid @primary-bg;
+  &:hover {
+    color: @primary-highlight;
+    border-bottom: 4px solid @primary-highlight;
+  }
+  &.left {
+    float: left;
+  }
+  &.right {
+    float: right;
+  }
+}
+.primary {
+  background-color: @primary-bg;
+  color: @primary-text;
+  button {
+    color: @primary-text;
+    border-color: @primary-border;
+    &:hover {
+      border-color: @primary-highlight;
+      color: @primary-highlight;
+    }
+    &.disabled {
+      cursor: not-allowed;
+      &:hover {
+        border-color: @primary-disabled;
+        color: @primary-disabled;
+      }
+    }
+  }
+  a {
+    color: @primary-highlight;
+  }
+  .tab {
+    border-bottom: 4px solid @primary-bg;
+    &:hover {
+      color: @primary-highlight;
+      border-bottom: 4px solid @primary-highlight;
+    }
+  }
+}
+.secondary {
+  background-color: @secondary-bg;
+  color: @secondary-text;
+  button {
+    color: @secondary-text;
+    border-color: @secondary-border;
+    &:hover {
+      border-color: @secondary-highlight;
+      color: @secondary-highlight;
+    }
+    &.disabled {
+      cursor: not-allowed;
+      &:hover {
+        border-color: @secondary-disabled;
+        color: @secondary-disabled;
+      }
+    }
+  }
+  a {
+    color: @secondary-highlight;
+  }
+  .tab {
+    border-bottom: 4px solid @secondary-bg;
+    &:hover {
+      color: @secondary-highlight;
+      border-bottom: 4px solid @secondary-highlight;
+    }
+  }
+}
+.notifications {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 10;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	li {
+		background-color: @secondary-bg;
+		pointer-events: all;
+		border-radius: 3px;
+		padding: 5px;
+		margin: 5px;
+		cursor: pointer;
+		white-space: pre-line;
+		width: auto;
+		max-width: ~"calc(100% - 10px)";
+		float: right;
+		clear: right;
+	}
+	.error {
+		background-color: @secondary-disabled;
+		&:hover {
+			background-color: lighten(@secondary-disabled, 20%);
+		}
+	}
+	.success {
+		background-color: @secondary-highlight;
+		&:hover {
+			background-color: lighten(@secondary-highlight, 20%);
+		}
+	}
+}
+.menuBar {
+  .primary();
+  box-sizing: border-box;
+  height: 32px;
+  line-height: 32px;
+  border-bottom: 2px solid @primary-border;
+
+  .options {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: @primary-bg;
+    border: 1px solid @primary-border;
+    border-radius: 2px;
+    padding: 5px;
+    cursor: default;
+    line-height: normal;
+    button {
+      &.active {
+        border-color: @secondary-highlight;      
+        background-color: @secondary-highlight;
+        color: @secondary-bg;
+        cursor: default;
+      }
+    }
+  }
+}
+.toolBar {
+  .primary();
+  float: left;
+  box-sizing: border-box;
+  border-right: 2px solid @primary-border;
+  width: 197px;
+  height: ~"calc(100% - 32px)";
+  .categories {
+    height: 24px;
+    line-height: 24px;
+    border-bottom: 2px solid @primary-border;
+    .tab {
+      padding: 0;
+      font-size: inherit;
+      width: ~"calc(100% / 3)";
+      &:hover {
+        border-color: @primary-highlight !important;
+      }
+      &.selected {
+        border-color: lighten(@primary-highlight, 20%);
+      }
+    }
+  }
+
+  .listContainer {
+    width: 100%;
+    height: ~"calc(100% - 24px)";
+    overflow-x: hidden;
+    overflow-y: auto;
+    .pluginList {
+      list-style-type: none;
+      padding: 5px 0;
+      margin: 0;
+      .item {
+        cursor: pointer;
+        padding: 2px 5px;
+        transition: all 100ms linear;
+        &:hover {
+          background-color: @primary-highlight !important;
+          color: @primary-bg;
+        }
+        &.selected {
+          background-color: lighten(@primary-highlight, 20%);
+        }
+        .updateStatus {
+          float: right;
+        }
+        .pluginAddSub {
+          float: right;
+          &.installed:hover {
+            color: @primary-disabled;
+          }
+        }
+      }
+    }
+  }
+}
+
+.viewer {
+  .secondary();
+  overflow: auto;
+  height: ~"calc(100% - 32px)";
+  padding: 10px;
+  box-sizing: border-box;
+  button {
+    position: absolute;
+    top: 42px;
+    right: 15px;
+    z-index: 1;
+    &.formatted {
+      border-color: @secondary-highlight;      
+      background-color: @secondary-highlight;
+      color: @secondary-bg;
+    }
+    &:hover {
+      background-color: @secondary-bg;
+      color: @secondary-highlight;
+    }
+  }
+  .help {
+    cursor: auto;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}

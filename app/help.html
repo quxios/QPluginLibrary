@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Help</title>
+</head>
+
+<body class="secondary">
+  <h1 id="version"></h1>
+  <div id="help"></div>
+  <script>
+    if (process.env.PRODUCTION === 'false') {
+      require('babel-register');
+    }
+    const theme = require('electron').ipcRenderer.sendSync('getProp', 'theme');
+    const { themeElements } = require('./js/renderer/style');
+    themeElements.forEach((element) => {
+      element.disabled = theme !== element.id;
+    })
+    let overrideStyle = document.createElement('style');
+    overrideStyle.innerHTML = `
+      body {
+        cursor: auto;
+        overflow: auto;
+        -webkit-user-select: text;
+      }
+
+      #help {
+        padding: 5px;
+        width: calc(100% - 30px);
+      }
+
+      #version {
+        padding: 5px;
+      }`;
+    document.head.appendChild(overrideStyle);
+
+
+    const marked = require('marked');
+    const fs = require('fs');
+    const path = require('path');
+
+    const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+    document.getElementById('version').innerHTML = `Current Version: ${json.version}`;
+    const content = fs.readFileSync(path.join(__dirname, 'HELP.md'), 'utf8');
+    marked(content, function(err, content) {
+      document.getElementById('help').innerHTML = content;
+    });
+  </script>
+</body>
+
+</html>
