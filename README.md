@@ -1,4 +1,4 @@
-## QPlugin Library 1.0.0
+## QPlugin Library 1.0.1
 
 ## How to run
 **With Electron**
