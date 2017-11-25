@@ -33,7 +33,7 @@ export default class Viewer extends React.Component {
     let update = '';
     const outdated = /^outdated:(.*)/.exec(updateStatus)
     if (outdated) {
-      update = `| [New version available](${outdated})`
+      update = `| [New version available](${outdated[1]})`
     }
     if (updateStatus === 'error') {
       update = '| Failed to connect to update server';
