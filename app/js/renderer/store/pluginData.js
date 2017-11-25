@@ -70,7 +70,7 @@ function parseHelp(help) {
     h1: /^ *={3,100} *[\n|\r]^(.*)[\n\r]^ *={3,100}/gm,
     h2: /^ *-{3,100}\s*[\n|\r]^(.*)[\n\r]^ *-{3,100}/gm
   }
-  return help.replace(reg.h1h2, '## $1\n### $2')
-    .replace(reg.h1, '## $1')
-    .replace(reg.h2, '### $1');
+  return help.replace(reg.h1h2, '\n\n## $1\n### $2')
+    .replace(reg.h1, '\n\n## $1')
+    .replace(reg.h2, '\n\n### $1');
 }
