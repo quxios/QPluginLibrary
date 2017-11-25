@@ -1,6 +1,6 @@
 {
   "name": "QPluginLibrary",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "main": "app/js/main/index.js",
   "author": "Quxios",
   "description": "RMMV Plugin Library",
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "electron . --dev",
-    "build": "gulp build"
+    "build": "gulp prebuild & build --x64 --ia32 -p always"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -36,5 +36,18 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
     "gulp-babel-minify": "^0.2.0"
+  },
+  "build": {
+    "directories": {
+      "app": "compiled"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "app/imgs/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }
