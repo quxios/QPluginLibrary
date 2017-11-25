@@ -102,6 +102,7 @@ export default new class PluginActions {
       console.error(error);
       return;
     }
+    Store.state.projectPlugins = [];
     Store.state.projectPath = projectPath;
     let loaded = 0;
     pluginList.forEach((pluginPath, i) => {
@@ -198,14 +199,20 @@ export default new class PluginActions {
     const l = Math.min(a.length, b.length);
     let value = 0;
     for (let i = 0; i < l; i++) {
-      // only checking if less than target
       if (a[i] < b[i]) {
         value = -1;
+        break;
+      }
+      if (a[i] > b[i]) {
+        value = 1;
         break;
       }
     }
     if (a.length < b.length) {
       value = -1;
+    }
+    if (a.length > b.length) {
+      value = 1;
     }
     if (value === -1) {
       plugin.updateStatus = `outdated:${target.download}`;
