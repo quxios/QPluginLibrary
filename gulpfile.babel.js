@@ -25,29 +25,7 @@ gulp.task('buildES6', ['copy'], () => {
     .pipe(gulp.dest('./compiled'));
 })
 
-gulp.task('build', ['buildES6'], () => {
-  buildPkg();
-  return builder.build({
-    config: {
-      directories: {
-        app: "compiled"
-      },
-      win: {
-        target: "nsis",
-        icon: "app/imgs/icon.ico"
-      },
-      nsis: {
-        oneClick: false,
-        allowToChangeInstallationDirectory: true
-      }
-    },
-    ia32: true,
-    x64: true
-  })
-});
-
-
-function buildPkg() {
+gulp.task('prebuild', ['buildES6'], () => {
   const {
     name, version, main, author, description, license, dependencies
   } = require('./package.json');
@@ -57,4 +35,4 @@ function buildPkg() {
     author, description, license, dependencies
   }
   fs.writeFileSync('./compiled/package.json', JSON.stringify(pkg, null, 2));
-}
+});
