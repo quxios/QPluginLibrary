@@ -7,7 +7,7 @@ class Store {
     theme: '',
 
     plugins: new Map(),
-    projectPlugins: [],
+    projectPlugins: new Map(),
 
     projectPath: '',
     loadingProject: false,
@@ -20,7 +20,7 @@ class Store {
   @computed
   get plugins() {
     let library = [...this.state.plugins.values()];
-    let project = [...this.state.projectPlugins];
+    let project = [...this.state.projectPlugins.values()];
     let all = [...library, ...project].sort(this.sortByName);
     switch (this.state.sort) {
       // TODO: more sory modes?
@@ -75,7 +75,8 @@ class Store {
         }
       }
     }
-    console.warn('Failed to find selected plugin');
+    console.warn(`Failed to find selected plugin: ${key}`);
+    this.state.selected = '';
     return null;
   }
 
