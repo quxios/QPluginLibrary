@@ -23,14 +23,15 @@ function start() {
 
 function setupUpdater() {
   autoUpdater.checkForUpdatesAndNotify();
+  // TODO: add update info into renderer
   autoUpdater.on('update-available', (info) => {
-    console.log('update available');
+
   })
   autoUpdater.on('download-progress', (progressObj) => {
 
   })
   autoUpdater.on('update-downloaded', (info) => {
-    console.log('update downloaded');
+
   })
 }
 
