@@ -5,6 +5,7 @@ import { action } from 'mobx'
 import Axios from 'axios'
 import fs from 'fs'
 import path from 'path'
+import chokidar from 'chokidar'
 
 import { getPluginData } from './pluginData'
 
@@ -16,6 +17,7 @@ function wait(ms) {
 }
 
 export default new class PluginActions {
+  watcher;
   urlCache = {};
   cacheExpire = 60000; // 1min
 
@@ -86,6 +88,7 @@ export default new class PluginActions {
     if (Store.state.loadingProject) {
       return;
     }
+    this.clearWatcher();
     const projectPath = path.dirname(filePath);
     const pluginsFolder = path.join(projectPath, './js/plugins');
     const plugins = path.join(projectPath, './js/plugins.js');
@@ -102,22 +105,88 @@ export default new class PluginActions {
       console.error(error);
       return;
     }
-    Store.state.projectPlugins = [];
+    this.startWatching(plugins);
+    if (Store.state.projectPath !== projectPath && Store.state.category === 'project') {
+      Store.state.selected = '';
+    }
     Store.state.projectPath = projectPath;
     let loaded = 0;
+    let newProjectPlugins = new Map();
     pluginList.forEach((pluginPath, i) => {
       getPluginData(pluginPath, function(i, err, pluginData) {
         if (!err) {
+          let key = pluginData.name;
+          let ui = 0;
+          while (newProjectPlugins.get(key + ui)) {
+            ui++;
+          }
+          key += ui;
           pluginData.index = i;
-          Store.state.projectPlugins.push(pluginData);
-          const l = Store.state.projectPlugins.length - 1;
-          this.checkForUpdate(Store.state.projectPlugins[l]);
+          newProjectPlugins.set(key, pluginData);
+          this.startWatching(pluginData.path);
         }
         if (++loaded === pluginList.length) {
+          Store.state.projectPlugins.replace(newProjectPlugins);
           Store.state.loadingProject = false;
+          this.checkAllForUpdate();
         }
       }.bind(this, i))
     })
+  }
+
+  @action.bound
+  reloadProjectPlugin(filePath) {
+    let projectPlugins = Store.state.projectPlugins;
+    const key = path.basename(filePath, '.js');
+    getPluginData(filePath, function(err, pluginData) {
+      if (err) {
+        console.error(`Failed to get plugin data from: ${pluginData.name}`);
+        return;
+      }
+      let key = pluginData.name;
+      let ui = 0;
+      let current = projectPlugins.get(key + ui);
+      while (current) {
+        pluginData.index = current.index;
+        projectPlugins.set(key + ui, pluginData);
+        ui++;
+        current = projectPlugins.get(key + ui);
+      }
+    })
+  }
+
+  clearWatcher() {
+    if (this.watcher) {
+      this.watcher.close();
+    }
+    this.watcher = null;
+  }
+
+  setupWatcher() {
+    this.watcher = chokidar.watch([], {
+      disableGlobbing: true
+    })
+    this.watcher.on('change', (filePath) => {
+      if (/\js(\/|\\)plugins\.js$/.test(filePath)) {
+        this.loadProjectPlugins(path.join(Store.state.projectPath, 'Game.rpgproject'));
+      } else {
+        this.reloadProjectPlugin(filePath);
+      }
+    })
+  }
+
+  startWatching(files) {
+    if (!this.watcher) {
+      this.setupWatcher();
+    }
+    this.watcher.add(files);
+  }
+
+  stopWatching(files) {
+    if (!this.watcher) {
+      return;
+    }
+    this.watcher.unwatch(files);
   }
 
   @action.bound
