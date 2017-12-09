@@ -12,6 +12,7 @@ export function getPluginData(pluginPath, callback) {
     const props = getProps(header);
     const help = getPluginHelp(header);
     let pluginData = {
+      path: pluginPath,
       name: path.basename(pluginPath, '.js'),
       version: getPluginVersion(header),
       help,
