@@ -1,8 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 
-import Marked from 'marked'
-
 export function getPluginData(pluginPath, callback) {
   fs.readFile(pluginPath, 'utf8', (err, data) => {
     if (err) {
