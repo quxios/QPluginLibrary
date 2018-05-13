@@ -1,3 +1,5 @@
+**NO LONGER SUPPORTED**
+
 ## QPlugin Library 1.0.1
 
 ## How to run
